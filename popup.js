@@ -100,7 +100,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             if (count > 0) {
                 const content = await zip.generateAsync({ type: "blob" });
-                saveAs(content, "images.zip"); // FileSaver.js lo việc tải file
+                const url = URL.createObjectURL(content);
+
+                chrome.downloads.download({
+                    url: url,
+                    filename: "images.zip",
+                    saveAs: true,
+                });
             }
         });
     }
