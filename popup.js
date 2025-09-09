@@ -36,12 +36,13 @@ document.addEventListener("DOMContentLoaded", async () => {
         const downloadZipBtn = document.getElementById("downloadZipBtn");
         const selectAllBtn = document.getElementById("selectAllBtn");
         const clearAllBtn = document.getElementById("clearAllBtn");
-
+        info.textContent = `📸 Tổng số ảnh: ${images.length} | Đã chọn: 0`;
         function updateButtonState() {
             const checked = container.querySelectorAll("input[type=checkbox]:checked");
             const hasSelection = checked.length > 0;
             downloadBtn.disabled = !hasSelection;
             downloadZipBtn.disabled = !hasSelection;
+            info.textContent = `📸 Tổng số ảnh: ${images.length} | Đã chọn: ${checked.length}`;
         }
 
         container.addEventListener("change", updateButtonState);
@@ -99,13 +100,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
             if (count > 0) {
                 const content = await zip.generateAsync({ type: "blob" });
-                const url = URL.createObjectURL(content);
-
-                chrome.downloads.download({
-                    url: url,
-                    filename: "images.zip",
-                    saveAs: true,
-                });
+                saveAs(content, "images.zip"); // FileSaver.js lo việc tải file
             }
         });
     }
